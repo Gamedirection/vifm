@@ -24,8 +24,8 @@ _Version 0.15.  This file last updated on 9 February 2026._
   - `config/vifm/colors/Default.vifm`
   - `config/vifm/scripts/README`
 - Added related repositories as submodules under `submodules/`:
-  - `submodules/qutebrowser-config-backup`
   - `submodules/TerminalImageViewer`
+  - `submodules/gwenview` (added as shallow submodule)
 
 ## Resources and Contacts ##
 

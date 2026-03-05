@@ -3,8 +3,8 @@ Fork-specific additions (2026-03-05)
 	Added personal Vifm configuration snapshot under config/vifm/.
 
 	Added submodules:
-	- submodules/qutebrowser-config-backup
 	- submodules/TerminalImageViewer
+	- submodules/gwenview (shallow submodule)
 
 0.14 to current
 
