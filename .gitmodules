@@ -1,0 +1,6 @@
+[submodule "submodules/qutebrowser-config-backup"]
+	path = submodules/qutebrowser-config-backup
+	url = https://github.com/Gamedirection/qutebrowser-config-backup.git
+[submodule "submodules/TerminalImageViewer"]
+	path = submodules/TerminalImageViewer
+	url = https://github.com/stefanhaustein/TerminalImageViewer.git

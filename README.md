@@ -17,6 +17,16 @@ functionality should be enough for most of use cases.
 
 _Version 0.15.  This file last updated on 9 February 2026._
 
+## Fork Additions (2026-03-05)
+
+- Added personal Vifm config snapshot under `config/vifm/`:
+  - `config/vifm/vifmrc`
+  - `config/vifm/colors/Default.vifm`
+  - `config/vifm/scripts/README`
+- Added related repositories as submodules under `submodules/`:
+  - `submodules/qutebrowser-config-backup`
+  - `submodules/TerminalImageViewer`
+
 ## Resources and Contacts ##
 
 | Usage   | Link
