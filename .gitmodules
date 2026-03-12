@@ -4,3 +4,12 @@
 [submodule "submodules/gwenview"]
 	path = submodules/gwenview
 	url = https://invent.kde.org/graphics/gwenview.git
+[submodule "submodules/treemd"]
+	path = submodules/treemd
+	url = https://github.com/Epistates/treemd.git
+[submodule "submodules/lvim"]
+	path = submodules/lvim
+	url = https://github.com/lunarvim/lunarvim.git
+[submodule "submodules/twig"]
+	path = submodules/twig
+	url = https://github.com/workdone0/twig.git

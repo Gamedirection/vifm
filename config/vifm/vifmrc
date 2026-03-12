@@ -1,29 +1,9 @@
 " vim: filetype=vifm :
-"
-" Sample configuration file for vifm (last updated: 11 May, 2025)
-"
-" You can edit this file by hand.  The " character at the beginning of a line
-" comments out the line.  Blank lines are ignored.  The basic format for each
-" item is shown with an example.
-"
-" The purpose of this file
-" ========================
-" 1. Provide a sensible default configuration out of the box.
-" 2. Demonstrate how a typical configuration file might look like.
-" 3. Familiarize a user with commonly used features.
-" 4. Provide some ideas/settings for various use cases.
-"
-" How to use this file
-" ====================
-" - Go through it top to bottom while reading comments.
-" - Adjust/remove/comment/uncomment lines as you see fit.
-" - Look up :commands or 'options' in the documentation to learn more.
-"
-" Some settings are set to provide more useful defaults without breaking
-" compatibility and others are just a great fit (e.g., some bindings) and are
-" almost universally useful, but most lines are provided simply as usage
-" examples and can be removed without hesitation.  Make configuration specific
-" to your needs using this file as a starting point.
+" Sample configuration file for vifm (last updated: 18 December, 2024)
+" You can edit this file by hand.
+" The " character at the beginning of a line comments out the line.
+" Blank lines are ignored.
+" The basic format for each item is shown with an example.
 
 " ------------------------------------------------------------------------------
 " Main settings
@@ -32,7 +12,9 @@
 " Command used to edit files in various contexts.  The default is vim.
 " If you would like to use another vi clone such as Elvis or Vile
 " you will need to change this setting.
-if executable('vim')
+if executable('lvim')
+    set vicmd=lvim
+elseif executable('vim')
     set vicmd=vim
 elseif executable('nvim')
     set vicmd=nvim
@@ -177,39 +159,17 @@ command! vgrep vim "+grep %a"
 command! reload :write | restart full
 
 " ------------------------------------------------------------------------------
-" File handlers and previewers
+" File types association
 " ------------------------------------------------------------------------------
 
-" Setting up handlers that are considered in all environments:
-"   filetype {pattern1,pattern2} program1,{Optional description}program2
+" :filetype pattern1,pattern2 defaultprogram,program2
+" :fileviewer pattern1,pattern2 consoleviewer
 "
-" Setting up handlers that are considered only in a graphical environment:
-"   filextype {pattern} graphical-program %c
-"
-" Setting up previewers:
-"   fileviewer {pattern1,pattern2} console-viewer1,console-viewer2
-"
-" ORDER MATTERS!  Both handlers and previewers are considered in the order of
-" their definition, therefore they should be defined from most to least
-" specific.  In particular, catch-all patterns like `*`, `*/`, `.*`, `*.*`
-" should be defined after all others.
-"
-" All entries matching a particular file are considered in order until an
-" existing command is found.  Other entries are accessible via :file command
-" for handlers or via `a` and `A` keys for previewers in view mode.
-"
-" The ordering can be checked at run-time by running
-" :filetype/:filextype/:fileviewer with a file name as the only argument.
-" This displays a menu of defined entries annotated with availability of
-" commands.
-"
-" More on syntax and usage:
-"  - macros like %c, %f, %d, etc. may be used in the commands
-"  - the %a macro is ignored
-"  - to insert a literal % use %%
-"  - spaces in an app name must be escaped, for example:
-"    + QuickTime\ Player.app
-"    + "c:/Program Files (x86)/app/app.exe"
+" The first entry is the default program to be used with a matching file.
+" The other programs for the file type can be accessed via :file command.
+" The command macros like %f, %F, %d, %D may be used in the commands.
+" The %a macro is ignored.  To use a % you must put %%.
+" Spaces in an app name must be escaped, for example: QuickTime\ Player.app
 
 " For automated FUSE mounts, you must register an extension with :file[x]type
 " in one of the following formats:
@@ -298,6 +258,13 @@ filextype {*.xhtml,*.html,*.htm},<text/html>
         \ firefox %f &,
 filetype {*.xhtml,*.html,*.htm},<text/html> links, lynx
 
+" JSON / YAML
+filextype {*.json,*.yaml,*.yml},<application/json>
+        \ {View in twig}
+        \ twig %c,
+        \ {Edit in lvim}
+        \ lvim %c,
+
 " Object
 filetype {*.o},<application/x-object> nm %f | less
 
@@ -329,16 +296,14 @@ filextype {*.sh3d}
         \ {Open in Sweet Home 3D}
         \ sweethome3d %c:p,
 filextype {*.bmp,*.jpg,*.jpeg,*.png,*.gif,*.xpm},<image/*>
-        \ {View in Gwenview}
-        \ gwenview %f,
         \ {View in sxiv}
         \ sxiv %f,
         \ {View in gpicview}
         \ gpicview %c,
         \ {View in shotwell}
         \ shotwell,
-fileviewer {*.bmp,*.jpg,*.jpeg,*.png,*.gif,*.xpm},<image/*>
-         \ tiv -w %pw -h %ph %c || chafa --size=%pwx%ph %c || img2txt %c || identify %f
+fileviewer {*.bmp,*.jpg,*.jpeg,*.png,*.gif,*.xpm,*.webp,*.avif},<image/*>
+         \ sh -c 'if command -v chafa >/dev/null 2>&1; then exec chafa --format symbols --size=80x40 "$1" 2>/dev/null; else exec identify "$1"; fi' sh %c
 
 " OpenRaster
 filextype *.ora
@@ -354,6 +319,11 @@ filextype *.vym
 filetype *.md5
        \ {Check MD5 hash sum}
        \ md5sum -c %f %S,
+
+" Markdown
+filetype {*.md,*.markdown,*.mdown,*.mkd}
+       \ {Open in treemd}
+       \ treemd %c,
 
 " SHA1
 filetype *.sha1
@@ -486,6 +456,19 @@ filextype */
 " filetype * explorer %"f &
 
 " ------------------------------------------------------------------------------
+" Panel configuration examples
+" ------------------------------------------------------------------------------
+
+" Customize view columns a bit (enable ellipsis for truncated file names)
+" set viewcolumns=-{name}..,6{}.
+
+" Show vertical border
+" set fillchars=vborder:│
+
+" Filter-out build and temporary files
+" filter! {*.lo,*.o,*.d,*.class,*.pyc,*.pyo,.*~}
+
+" ------------------------------------------------------------------------------
 " Sample keyboard mappings
 " ------------------------------------------------------------------------------
 
@@ -585,19 +568,6 @@ nnoremap <a-o> :sync %c<cr>
 " nnoremap <c-u> <c-w>x
 
 " ------------------------------------------------------------------------------
-" Panel configuration examples
-" ------------------------------------------------------------------------------
-
-" Customize view columns a bit (enable ellipsis for truncated file names)
-" set viewcolumns=-{name}..,6{}.
-
-" Show vertical border
-" set fillchars=vborder:│
-
-" Filter-out build artifacts and temporary files
-" filter! {*.lo,*.o,*.d,*.class,*.pyc,*.pyo,.*~}
-
-" ------------------------------------------------------------------------------
 " Various customization examples
 " ------------------------------------------------------------------------------
 
@@ -607,7 +577,7 @@ nnoremap <a-o> :sync %c<cr>
 " Add additional place to look for executables
 " let $PATH = $HOME.'/bin/fuse:'.$PATH
 
-" Disable particular shortcut
+" Block particular shortcut
 " nnoremap <left> <nop>
 
 " Export IPC name of current instance as environment variable and use it to

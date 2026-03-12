@@ -17,15 +17,47 @@ functionality should be enough for most of use cases.
 
 _Version 0.15.  This file last updated on 9 February 2026._
 
-## Fork Additions (2026-03-05)
+## Fork Additions
 
-- Added personal Vifm config snapshot under `config/vifm/`:
-  - `config/vifm/vifmrc`
-  - `config/vifm/colors/Default.vifm`
-  - `config/vifm/scripts/README`
-- Added related repositories as submodules under `submodules/`:
+- Personal deployable config snapshots live under `config/`:
+  - `config/vifm/`
+  - `config/lvim/`
+- Optional tool repositories live under `submodules/` and remain uninitialized on a fresh clone:
+  - `submodules/treemd`
+  - `submodules/twig`
+  - `submodules/lvim`
   - `submodules/TerminalImageViewer`
-  - `submodules/gwenview` (added as shallow submodule)
+  - `submodules/gwenview`
+- Local Twig customization is captured in `patches/twig-edit-hotkey.patch`.
+  The submodule currently tracks upstream `workdone0/twig`; point it at a hosted fork later if you want the patched commit itself to be fetched directly.
+
+### Personal Deployment
+
+Install the tracked configs onto the current machine:
+
+```bash
+./scripts/install-personal-config.sh
+```
+
+Copy instead of symlink:
+
+```bash
+./scripts/install-personal-config.sh --copy
+```
+
+Initialize only the optional submodules you want:
+
+```bash
+git submodule update --init submodules/treemd
+git submodule update --init submodules/twig
+git submodule update --init submodules/lvim
+```
+
+Apply the local Twig hotkey customization after initializing that submodule:
+
+```bash
+./scripts/apply-twig-patch.sh
+```
 
 ## Resources and Contacts ##
 
